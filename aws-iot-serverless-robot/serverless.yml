@@ -3,12 +3,72 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
+  region: us-west-1
+  stage: dev
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:*"
+          Resource:
+            - "Fn::GetAtt": [RobotRegistryTable, Arn]
+  # apiGateway:
+  #   apiKeys:
+  #     - iot-api-key
 
 functions:
-  api:
-    handler: index.handler
+  registerNewRobot:
+    handler: index.registerNewRobot
     events:
-      - httpApi:
-          path: /
+      - http:
+          path: /robot/register
+          method: post
+          # private: true
+    environment:
+      TABLE_NAME: robots_registry
+      
+  getAvailableRobots:
+    handler: index.getAvailableRobots
+    events:
+      - http:
+          path: /robot/available
           method: get
+          # private: true
+    environment:
+      TABLE_NAME: robots_registry
+  
+  setRobotStatus:
+    handler: index.setRobotStatus
+    events:
+      - http: 
+          path: /robot/status
+          method: post
+          # private: true
+    environment:
+      TABLE_NAME: robots_registry
+
+    # sendRobotCommand:
+    # handler: index.sendRobotCommand
+    # events:
+    #   - http: 
+    #       path: /robot/command
+    #       method: post
+    #       # private: true
+
+resources:
+  Resources:
+    RobotRegistryTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+          TableName: robots_registry
+          AttributeDefinitions:
+            - AttributeName: robotId
+              AttributeType: S
+          KeySchema:
+            - AttributeName: robotId
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5     
