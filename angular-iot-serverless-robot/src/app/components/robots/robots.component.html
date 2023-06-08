@@ -1,1 +1,20 @@
-<p>robots works!</p>
+<table>
+    <thead>
+    <tr>
+        <th>Robot ID</th>
+        <th>Robot IP</th>
+        <th>Robot Name</th>
+        <th>Online</th>
+        <th>Available</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let robot of availableRobots">
+            <td>{{ robot.robotId }}</td>
+            <td>{{ robot.robotIp }}</td>
+            <td>{{ robot.robotName }}</td>
+            <td>{{ robot.isOnline }}</td>
+            <td>{{ robot.isAvailable }}</td>
+        </tr>
+    </tbody>
+</table>
