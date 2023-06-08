@@ -1,1 +1,21 @@
-<p>rooms works!</p>
+<div>
+  <form [formGroup]="userForm" (submit)="setUser()">
+    <input formControlName="user" placeholder="Usuario" />
+    <button>submit</button>
+  </form>
+  <form [formGroup]="createRoomForm" (submit)="createRoom()">
+    <input formControlName="roomName" placeholder="Sala" />
+    <input formControlName="password" placeholder="Contraseña" type="password"/>
+    <button>submit</button>
+  </form>
+  <form [formGroup]="joinRoomForm" (submit)="joinRoom()">
+    <input formControlName="roomId" placeholder="Sala" />
+    <input formControlName="password" placeholder="Contraseña" type="password"/>
+    <button>submit</button>
+  </form>
+  <form [formGroup]="setReadyForm">
+    <input formControlName="roomId"/>
+    <button (click)="setReady(true)">Ready</button>
+    <button (click)="setReady(false)">Not Ready</button>
+  </form>
+</div>

@@ -8,6 +8,7 @@ import {RoomsComponent} from "./components/rooms/rooms.component";
 import {RoomHomeComponent} from "./components/room-home/room-home.component";
 
 const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'robots', component: RobotsComponent },
   { path: 'rooms', component: RoomsComponent },

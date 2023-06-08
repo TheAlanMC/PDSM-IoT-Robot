@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RobotsComponent } from './components/robots/robots.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomHomeComponent } from './components/room-home/room-home.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RoomHomeComponent } from './components/room-home/room-home.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
