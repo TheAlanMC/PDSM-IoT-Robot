@@ -21,10 +21,9 @@ const failedResponse = (statusCode, errorMessage) => {
 
 // Main handlers
 module.exports.connectHandler = async (event, context, callback) => {
+    console.log("New connection event")
+    const connectionId = event.requestContext.connectionId;
     try {
-        console.log("New connection event")
-        const connectionId = event.requestContext.connectionId;
-
         console.log(`Connection ID is ${connectionId}`)
         const connectionData = {
             connectionId: connectionId
@@ -36,16 +35,8 @@ module.exports.connectHandler = async (event, context, callback) => {
         }).promise();
     } catch (err) {
         console.log(err);
-        sendToConnection(connectionId, {
-            message: "Error creating a new connection",
-            type: "error"
-        }, event);
         callback(failedResponse(500, "Error creating a new connection"));
     }
-    sendToConnection(connectionId, {
-        message: "Connected",
-        type: "info"
-    }, event)
     callback(null, successfulResponse);
 };
 
@@ -196,7 +187,7 @@ module.exports.createRoomHandler = async (event, context, callback) => {
         }, event);
         sendToConnection(connectionId, {
             message: `${connectionData.Item.userName} ingresó a la sala`,
-            type: "update"
+            type: "room-update"
         }, event);
         callback(null, successfulResponse);
     } catch (err) {
@@ -292,7 +283,7 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
             const connectionId = member.connectionId;
             const message = {
                 message: `${connectionData.Item.userName} ingresó a la sala`,
-                type: "notification"
+                type: "room-update"
             };
             await sendToConnection(connectionId, message, event);
         });
