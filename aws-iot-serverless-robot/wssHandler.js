@@ -42,9 +42,26 @@ module.exports.connectHandler = async (event, context, callback) => {
     callback(null, successfulResponse);
 };
 
-module.exports.disconnectHandler = async (_event, _context, callback) => {
+module.exports.disconnectHandler = async (event, _context, callback) => {
+    try {
+        console.log("Disconnect event")
+        const connectionId = event.requestContext.connectionId;
+
+        console.log(`Connection ID is ${connectionId}`)
+        const deleteParams = {
+            TableName: ACTIVE_CONNECTIONS_TABLE,
+            Key: {
+                connectionId: connectionId
+            }
+        };
+
+        await DynamoDB.delete(deleteParams).promise();
+    } catch (err) {
+        console.log(err);
+        callback(failedResponse(500, "Error deleting connection"));
+    }
+
     callback(null, successfulResponse);
-    // TODO: Remove connection from active connections table
 };
 
 module.exports.defaultHandler = async (_event, _context, callback) => {
