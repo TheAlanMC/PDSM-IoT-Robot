@@ -4,16 +4,32 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs16.x
-  region: us-west-1
+
+  environment:
+    ROBOT_REGISTRY_TABLE: ${self:resources.Resources.RobotRegistryTable.Properties.TableName}
+    ACTIVE_CONNECTIONS_TABLE: ${self:resources.Resources.ActiveConnectionsTable.Properties.TableName}
+    ROOMS_TABLE: ${self:resources.Resources.RoomsTable.Properties.TableName}
+
+  region: us-east-1
   stage: dev
   iam:
     role:
       statements:
         - Effect: "Allow"
           Action:
-            - "dynamodb:*"
+            - "dynamodb:GetItem"
+            - "dynamodb:PutItem"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:DeleteItem"
+            - "dynamodb:Query"
+            - "dynamodb:Scan"
           Resource:
-            - "Fn::GetAtt": [RobotRegistryTable, Arn]
+            - "arn:aws:dynamodb:us-east-1:*:*"
+        - Effect: Allow
+          Action:
+            - "execute-api:ManageConnections"
+          Resource:
+            - "arn:aws:execute-api:*:*:**/@connections/*"
   # apiGateway:
   #   apiKeys:
   #     - iot-api-key
@@ -45,30 +61,85 @@ functions:
       - http: 
           path: /robot/status
           method: post
-          # private: true
+
     environment:
       TABLE_NAME: robots_registry
 
-    # sendRobotCommand:
-    # handler: index.sendRobotCommand
-    # events:
-    #   - http: 
-    #       path: /robot/command
-    #       method: post
-    #       # private: true
+  connectHandler:
+    handler: wssHandler.connectHandler
+    events:
+      - websocket:
+          route: $connect
+  disconnectHandler:
+    handler: wssHandler.disconnectHandler
+    events:
+      - websocket:
+          route: $disconnect
+  defaultHandler:
+    handler: wssHandler.defaultHandler
+    events:
+      - websocket:
+          route: $default
+  setUserHandler:
+    handler: wssHandler.setUserHandler
+    events:
+      - websocket:
+          route: setUser
+  createRoomHandler:
+    handler: wssHandler.createRoomHandler
+    events:
+      - websocket:
+          route: createRoom
+  leaveRoomHandler:
+    handler: wssHandler.leaveRoomHandler
+    events:
+      - websocket:
+          route: leaveRoom
+  joinRoomHandler:
+    handler: wssHandler.joinRoomHandler
+    events:
+      - websocket:
+          route: joinRoom
+  setReadyHandler:
+    handler: wssHandler.setReadyHandler
+    events:
+      - websocket:
+          route: setReady
 
 resources:
   Resources:
     RobotRegistryTable:
-        Type: AWS::DynamoDB::Table
-        Properties:
-          TableName: robots_registry
-          AttributeDefinitions:
-            - AttributeName: robotId
-              AttributeType: S
-          KeySchema:
-            - AttributeName: robotId
-              KeyType: HASH
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5     
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: robots_registry
+        AttributeDefinitions:
+          - AttributeName: robotId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: robotId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    ActiveConnectionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: active_connections
+        AttributeDefinitions:
+          - AttributeName: connectionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    RoomsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: rooms
+        AttributeDefinitions:
+          - AttributeName: roomId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: roomId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
