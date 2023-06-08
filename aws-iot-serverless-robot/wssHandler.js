@@ -21,10 +21,9 @@ const failedResponse = (statusCode, errorMessage) => {
 
 // Main handlers
 module.exports.connectHandler = async (event, context, callback) => {
+    console.log("New connection event")
+    const connectionId = event.requestContext.connectionId;
     try {
-        console.log("New connection event")
-        const connectionId = event.requestContext.connectionId;
-
         console.log(`Connection ID is ${connectionId}`)
         const connectionData = {
             connectionId: connectionId
@@ -38,7 +37,6 @@ module.exports.connectHandler = async (event, context, callback) => {
         console.log(err);
         callback(failedResponse(500, "Error creating a new connection"));
     }
-
     callback(null, successfulResponse);
 };
 
@@ -64,7 +62,11 @@ module.exports.disconnectHandler = async (event, _context, callback) => {
     callback(null, successfulResponse);
 };
 
-module.exports.defaultHandler = async (_event, _context, callback) => {
+module.exports.defaultHandler = async (event, _context, callback) => {
+    sendToConnection(connectionId, {
+        message: "Invalid request",
+        type: "error"
+    }, event);
     callback(failedResponse(400, "Invalid request"))
 };
 
@@ -90,6 +92,10 @@ module.exports.setUserHandler = async (event, context, callback) => {
 
     if (!connectionData.Item) {
         console.log("Connection not found")
+        sendToConnection(connectionId, {
+            message: "Connection not found",
+            type: "error"
+        }, event);
         callback(failedResponse(400, "Connection not found"));
     }
 
@@ -111,9 +117,17 @@ module.exports.setUserHandler = async (event, context, callback) => {
     try {
         await DynamoDB.update(updateParams).promise();
         console.log("Connection updated")
+        sendToConnection(connectionId, {
+            message: "User set",
+            type: "info"
+        }, event);
         callback(null, successfulResponse);
     } catch (err) {
         console.log(err);
+        sendToConnection(connectionId, {
+            message: "Error updating connection",
+            type: "error"
+        }, event);
         callback(failedResponse(500, "Error updating connection"));
     }
     
@@ -139,6 +153,10 @@ module.exports.createRoomHandler = async (event, context, callback) => {
 
     if (!connectionData.Item) {
         console.log("Connection not found");
+        sendToConnection(connectionId, {
+            message: "Connection not found",
+            type: "error"
+        }, event);
         callback(failedResponse(400, "Connection not found"));
     }
 
@@ -155,6 +173,7 @@ module.exports.createRoomHandler = async (event, context, callback) => {
             isHost: true,
             userName: connectionData.Item.userName,
         }],
+        canJoin: true
     };
 
     try {
@@ -163,9 +182,21 @@ module.exports.createRoomHandler = async (event, context, callback) => {
             Item: roomData
         }).promise();
         console.log("Room created")
+        sendToConnection(connectionId, {
+            message: "Room created",
+            type: "info"
+        }, event);
+        sendToConnection(connectionId, {
+            message: `${connectionData.Item.userName} ingresó a la sala`,
+            type: "room-update"
+        }, event);
         callback(null, successfulResponse);
     } catch (err) {
         console.log(err);
+        sendToConnection(connectionId, {
+            message: "Error creating a new room",
+            type: "error"
+        }, event);
         callback(failedResponse(500, "Error creating a new room"));
     }
 };
@@ -189,6 +220,10 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
 
     if (!connectionData.Item) {
         console.log("Connection not found");
+        sendToConnection(connectionId, {
+            message: "Connection not found",
+            type: "error"
+        }, event);
         callback(failedResponse(400, "Connection not found"));
     }
 
@@ -202,13 +237,31 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
 
     if (!roomData.Item) {
         console.log("Room not found");
+        sendToConnection(connectionId, {
+            message: "Room not found",
+            type: "error"
+        }, event);
         callback(failedResponse(404, "Room not found"));
     }
 
     // check if the password is correct
     if (roomData.Item.password !== password) {
         console.log("Incorrect password");
+        sendToConnection(connectionId, {
+            message: "Incorrect password",
+            type: "error"
+        }, event);
         callback(failedResponse(401, "Incorrect password"));
+    }
+
+    // check if the room is joinable
+    if (!roomData.Item.canJoin) {
+        console.log("Room is not joinable");
+        sendToConnection(connectionId, {
+            message: "Room is not joinable",
+            type: "error"
+        }, event);
+        callback(failedResponse(403, "Room is not joinable"));
     }
 
     // add the connection to the room
@@ -220,14 +273,16 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
         isHost: false,
         userName: connectionData.Item.userName,
     });
+    const canJoin = members.length < 4;
     const updateParams = {
         TableName: ROOMS_TABLE,
         Key: {
             roomId: roomId
         },
-        UpdateExpression: "set members = :members",
+        UpdateExpression: "set members = :members , canJoin = :canJoin",
         ExpressionAttributeValues: {
-            ":members": members
+            ":members": members,
+            ":canJoin": canJoin
         },
         ReturnValues: "UPDATED_NEW"
     };
@@ -241,14 +296,18 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
             const connectionId = member.connectionId;
             const message = {
                 message: `${connectionData.Item.userName} ingresó a la sala`,
-                type: "notification"
+                type: "room-update"
             };
             await sendToConnection(connectionId, message, event);
         });
         callback(null, successfulResponse);
     } catch (err) {
         console.log(err);
-        callback(failedResponse(500, "Error creating a new room"));
+        sendToConnection(connectionId, {
+            message: "Error joining room",
+            type: "error"
+        }, event);
+        callback(failedResponse(500, "Error joining room"));
     }
 };
 
@@ -290,14 +349,16 @@ module.exports.leaveRoomHandler = async (event, context, callback) => {
     console.log("Removing connection from room");
     const members = roomData.Item.members;
     const newMembers = members.filter(member => member.connectionId !== connectionId);
+    const canJoin = true;
     const updateParams = {
         TableName: ROOMS_TABLE,
         Key: {
             roomId: roomId
         },
-        UpdateExpression: "set members = :members",
+        UpdateExpression: "set members = :members, canJoin = :canJoin",
         ExpressionAttributeValues: {
-            ":members": newMembers
+            ":members": newMembers,
+            ":canJoin": canJoin
         },
         ReturnValues: "UPDATED_NEW"
     };
@@ -305,9 +366,21 @@ module.exports.leaveRoomHandler = async (event, context, callback) => {
     try {
         await DynamoDB.update(updateParams).promise();
         console.log("Connection removed from room")
+        newMembers.forEach(async (member) => {
+            const connectionId = member.connectionId;
+            const message = {
+                message: `${connectionData.Item.userName} salió de la sala`,
+                type: "notification"
+            };
+            await sendToConnection(connectionId, message, event);
+        });
         callback(null, successfulResponse);
     } catch (err) {
         console.log(err);
+        sendToConnection(connectionId, {
+            message: "Error removing connection from room",
+            type: "error"
+        }, event);
         callback(failedResponse(500, "Error removing connection from room"));
     }
 };
