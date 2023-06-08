@@ -173,6 +173,7 @@ module.exports.createRoomHandler = async (event, context, callback) => {
             isHost: true,
             userName: connectionData.Item.userName,
         }],
+        canJoin: true
     };
 
     try {
@@ -253,6 +254,16 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
         callback(failedResponse(401, "Incorrect password"));
     }
 
+    // check if the room is joinable
+    if (!roomData.Item.canJoin) {
+        console.log("Room is not joinable");
+        sendToConnection(connectionId, {
+            message: "Room is not joinable",
+            type: "error"
+        }, event);
+        callback(failedResponse(403, "Room is not joinable"));
+    }
+
     // add the connection to the room
     console.log("Adding connection to room");
     const members = roomData.Item.members;
@@ -262,14 +273,16 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
         isHost: false,
         userName: connectionData.Item.userName,
     });
+    const canJoin = members.length < 4;
     const updateParams = {
         TableName: ROOMS_TABLE,
         Key: {
             roomId: roomId
         },
-        UpdateExpression: "set members = :members",
+        UpdateExpression: "set members = :members , canJoin = :canJoin",
         ExpressionAttributeValues: {
-            ":members": members
+            ":members": members,
+            ":canJoin": canJoin
         },
         ReturnValues: "UPDATED_NEW"
     };
@@ -336,14 +349,16 @@ module.exports.leaveRoomHandler = async (event, context, callback) => {
     console.log("Removing connection from room");
     const members = roomData.Item.members;
     const newMembers = members.filter(member => member.connectionId !== connectionId);
+    const canJoin = true;
     const updateParams = {
         TableName: ROOMS_TABLE,
         Key: {
             roomId: roomId
         },
-        UpdateExpression: "set members = :members",
+        UpdateExpression: "set members = :members, canJoin = :canJoin",
         ExpressionAttributeValues: {
-            ":members": newMembers
+            ":members": newMembers,
+            ":canJoin": canJoin
         },
         ReturnValues: "UPDATED_NEW"
     };
