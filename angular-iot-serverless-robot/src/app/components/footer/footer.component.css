@@ -1,0 +1,67 @@
+/* start footer styles*/
+.footer {
+  background-color: #0f0f6a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 10px 0 0 0;
+  padding: 20px 0;
+}
+
+.footer .dev {
+  height: 200px;
+}
+
+.dev-wrap {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.dev img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 50%;
+  animation-name: spin;
+  animation-duration: 2500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dev img:hover {
+  animation-play-state: paused;
+}
+
+.dev-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.dev-data span {
+  font-weight: bold;
+}
+
+/* end footer styles*/
+@media (max-width: 1000px) {
+  .dev-wrap {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dev {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/*# sourceMappingURL=footer.component.css.map */

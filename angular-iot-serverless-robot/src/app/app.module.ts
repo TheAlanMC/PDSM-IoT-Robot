@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { ChartComponent } from './components/chart/chart.component';
     RoomHomeComponent,
     MatchDetailsComponent,
     ChartComponent,
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
