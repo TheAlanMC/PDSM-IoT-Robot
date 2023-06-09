@@ -1,3 +1,4 @@
+<div class="background"></div>
 <table>
   <thead>
     <tr>
@@ -7,15 +8,17 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let room of rooms">
-      <td>{{room.roomName}}</td>
-      <td>{{room.members.length}}/4</td>
-      <td>
-        <button class="btn btn-primary" *ngIf="room.canJoin">Unirse</button>
-      </td>
-    </tr>
+    <ng-container *ngFor="let room of rooms">
+      <tr *ngIf="room.members.length !== 4">
+        <td>{{room.roomName}}</td>
+        <td>{{room.members.length}}/4</td>
+        <td>
+          <button class="btn btn-primary" *ngIf="room.canJoin">Unirse</button>
+        </td>
+      </tr>
+    </ng-container>
   </tbody>
 </table>
 <div class="table">
-  <button (click)="createRoom()">Crear sala</button>
+  <button class="button" (click)="createRoom()">Crear sala</button>
 </div>
