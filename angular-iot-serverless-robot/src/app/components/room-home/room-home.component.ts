@@ -12,10 +12,9 @@ import {RoomsService} from "../../services/rooms.service";
 export class RoomHomeComponent implements OnInit {
 
   joinMessages: any[] = [];
-
   members: any[] = [];
-  readyMessages: any[] = [];
   roomId: string;
+  isDisabled = false;
 
   constructor(
     private websocketService: WebsocketService,
@@ -23,6 +22,7 @@ export class RoomHomeComponent implements OnInit {
     private roomsService: RoomsService
   ) {
     this.roomId = this.activatedRoute.snapshot.paramMap.get('id')!;
+    sessionStorage.setItem('roomId', this.roomId);
   }
 
   ngOnInit(): void {
@@ -35,12 +35,20 @@ export class RoomHomeComponent implements OnInit {
       })
     })
     this.websocketService.getReadyObservable().subscribe((message) => {
-      this.members = this.members.map((member) => {
-        if(member.userName === message.userName) {
-          member.isReady = message.isReady;
-        }
-        return member;
-      });
+      if(message.startGame) {
+        this.members = this.members.map((member) => {
+          member.isReady = true;
+          return member;
+        });
+        this.startGame();
+      } else {
+        this.members = this.members.map((member) => {
+          if(member.userName === message.userName) {
+            member.isReady = message.isReady;
+          }
+          return member;
+        });
+      }
     })
     this.roomsService.getRoomById(this.roomId).subscribe({
       next: (response: any) => {
@@ -56,4 +64,22 @@ export class RoomHomeComponent implements OnInit {
     this.websocketService.setReady(isReady, this.roomId);
   }
 
+  startGame() {
+    this.isDisabled = true;
+    let currVal = 5;
+    const interval = setInterval(() => {
+      if(currVal === -1) {
+        clearInterval(interval);
+        return;
+      }
+      this.joinMessages = [
+        ...this.joinMessages,
+        {
+          message: 'El juego comenzará en ' + currVal,
+          timestamp: new Date()
+        }
+      ]
+      currVal--;
+    }, 1000);
+  }
 }

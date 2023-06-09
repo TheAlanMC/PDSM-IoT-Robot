@@ -29,10 +29,11 @@ export class RobotsComponent implements OnInit {
     );
   }
 
-  onSelectedRobot(robot: string): void {
+  onSelectedRobot(robot: any): void {
     console.log('Selected robot:', robot);
     const user = sessionStorage.getItem('user');
-    this.webSocketService.setUser(user!, robot);
+    this.webSocketService.setUser(user!, robot.robotId);
+    sessionStorage.setItem('robotIp', robot.robotIp)
     this.router.navigate(['/rooms']);
   }
 }
