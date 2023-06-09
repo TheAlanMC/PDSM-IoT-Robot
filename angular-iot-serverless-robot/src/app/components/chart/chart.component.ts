@@ -11,56 +11,556 @@ import { MovementsService } from '../../services/movements.service';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit, AfterViewInit {
-  @Input() chartId: string = '';
+  player: any[] = [
+    {
+      userName: 'Player 1',
+      movements: [
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+      ],
+    },
+    {
+      userName: 'Player 2',
+      movements: [
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+      ],
+    },
+    {
+      userName: 'Player 3',
+      movements: [
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+      ],
+    },
+    {
+      userName: 'Player 4',
+      movements: [
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 0,
+          rightMotorDirection: 0,
+          leftMotorSpeed: 0,
+          leftMotorDirection: 0,
+          servoAngle: 0,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+        {
+          rightMotorSpeed: 1,
+          rightMotorDirection: 1,
+          leftMotorSpeed: 1,
+          leftMotorDirection: 1,
+          servoAngle: 1,
+        },
+      ],
+    },
+  ];
 
   constructor(private movementsService: MovementsService) {}
 
   ngAfterViewInit(): void {
     Chart.register(...registerables);
 
-    const ctx = document.getElementById(this.chartId) as HTMLCanvasElement;
-    const myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [
-          {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
+    const chartRightMotor1 = new Chart(
+      document.getElementById('chartRightMotor1') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Derecho',
+              data: this.player[0][0],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[0][1],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
         },
-      },
-    });
+      }
+    );
+    const chartLeftMotor1 = new Chart(
+      document.getElementById('chartLeftMotor1') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Izquierdo',
+              data: this.player[0][2],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[0][3],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartServoAngle1 = new Chart(
+      document.getElementById('chartServoAngle1') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Control Servo',
+              data: this.player[0][4],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+
+    //PLAYER 2
+    const chartRightMotor2 = new Chart(
+      document.getElementById('chartRightMotor2') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Derecho',
+              data: this.player[1][0],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[1][1],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartLeftMotor2 = new Chart(
+      document.getElementById('chartLeftMotor2') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Izquierdo',
+              data: this.player[1][2],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[1][3],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartServoAngle2 = new Chart(
+      document.getElementById('chartServoAngle2') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Control Servo',
+              data: this.player[1][4],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+
+    //PLAYER
+    const chartRightMotor3 = new Chart(
+      document.getElementById('chartRightMotor3') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Derecho',
+              data: this.player[2][0],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[2][1],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartLeftMotor3 = new Chart(
+      document.getElementById('chartLeftMotor3') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Izquierdo',
+              data: this.player[2][2],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[2][3],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartServoAngle3 = new Chart(
+      document.getElementById('chartServoAngle3') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Control Servo',
+              data: this.player[2][4],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+
+    //PLAYER 4
+    const chartRightMotor4 = new Chart(
+      document.getElementById('chartRightMotor4') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Derecho',
+              data: this.player[3][0],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[3][1],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartLeftMotor4 = new Chart(
+      document.getElementById('chartLeftMotor4') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Motor Izquierdo',
+              data: this.player[3][2],
+            },
+            {
+              label: 'Direccion del motor',
+              data: this.player[3][3],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
+    const chartServoAngle4 = new Chart(
+      document.getElementById('chartServoAngle4') as HTMLCanvasElement,
+      {
+        type: 'line',
+        data: {
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [
+            {
+              label: 'Control Servo',
+              data: this.player[3][4],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      }
+    );
   }
 
   ngOnInit(): void {
     this.movementsService.getMovements().subscribe({
       next: (data: any) => {
         console.log(data);
+        for (let i = 0; i < 4; i++) {
+          let rightMotorSpeed: number[] = [];
+          let rightMotorDirection: number[] = [];
+          let leftMotorSpeed: number[] = [];
+          let leftMotorDirection: number[] = [];
+          let servoAngle: number[] = [];
+          data[i].movements.forEach((element: any) => {
+            rightMotorSpeed.push(element.rightMotorSpeed);
+            rightMotorDirection.push(element.rightMotorDirection);
+            leftMotorSpeed.push(element.leftMotorSpeed);
+            leftMotorDirection.push(element.leftMotorDirection);
+            servoAngle.push(element.servoAngle);
+          });
+
+          this.player.push([
+            rightMotorSpeed,
+            rightMotorDirection,
+            leftMotorSpeed,
+            leftMotorDirection,
+            servoAngle,
+          ]);
+        }
       },
       error: (error: any) => {
         console.log(error);
