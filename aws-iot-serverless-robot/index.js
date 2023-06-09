@@ -5,6 +5,12 @@ const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const TABLE_NAME = process.env.TABLE_NAME;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers" : "*",
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+}
+
 module.exports.registerNewRobot = async (event) => {
   try {
     // TODO: MAYBE ADD A SECRET KEY TO REGISTER A NEW ROBOT
@@ -24,6 +30,7 @@ module.exports.registerNewRobot = async (event) => {
         statusCode: 200,
         headers: {
           "Content-Type": "application/json",
+          ...corsHeaders
         },
         body: JSON.stringify({
           data: null,
@@ -49,6 +56,7 @@ module.exports.registerNewRobot = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: null,
@@ -62,6 +70,7 @@ module.exports.registerNewRobot = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: null,
@@ -86,6 +95,7 @@ module.exports.getAvailableRobots = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: Items.map((item) => ({
@@ -105,6 +115,7 @@ module.exports.getAvailableRobots = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: null,
@@ -134,6 +145,7 @@ module.exports.setRobotStatus = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: null,
@@ -147,6 +159,7 @@ module.exports.setRobotStatus = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders
       },
       body: JSON.stringify({
         data: null,
