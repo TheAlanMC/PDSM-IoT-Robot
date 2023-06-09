@@ -454,7 +454,7 @@ module.exports.setReadyHandler = async (event, context, callback) => {
         if (allReady) {
             // send a message to all members that the game is starting
             const message = {
-                action: "startGame",
+                type: "start-game",
                 roomId: roomId
             };
             const postCalls = newMembers.map(member => {
@@ -464,7 +464,7 @@ module.exports.setReadyHandler = async (event, context, callback) => {
         } else if(isReady) {
             // send a message to all members that a member is ready
             const message = {
-                action: "setReady",
+                type: "set-ready",
                 roomId: roomId,
                 isReady: isReady,
                 userName: connectionData.Item.userName
@@ -476,7 +476,7 @@ module.exports.setReadyHandler = async (event, context, callback) => {
         } else {
             // send a message to all members that a member is not ready
             const message = {
-                action: "setReady",
+                type: "set-ready",
                 roomId: roomId,
                 isReady: isReady,
                 userName: connectionData.Item.userName

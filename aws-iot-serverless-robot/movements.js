@@ -98,7 +98,37 @@ module.exports.getMovements = async (event) => {
   };
 };
 
-module.exports.getRooms = async () => {
+module.exports.getRooms = async (event) => {
+  let roomId = null;
+  try {
+    roomId = event.queryStringParameters.roomId;
+  } catch (error) {
+    console.log(error);
+    roomId = null;
+  }
+
+  if(roomId !== null) {
+    const roomData = await DynamoDB.get({
+      TableName: TABLE_NAME,
+      Key: { roomId: roomId },
+    }).promise();
+  
+    if (!roomData.Item) {
+      console.log("Room not found");
+      return {
+        statusCode: 404,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: "Room not found" }),
+      };
+    }
+  
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify(roomData.Item),
+    };
+  }
+
   const roomsData = await DynamoDB.scan({
     TableName: TABLE_NAME,
   }).promise();
@@ -109,3 +139,4 @@ module.exports.getRooms = async () => {
     body: JSON.stringify(roomsData.Items),
   };
 };
+
