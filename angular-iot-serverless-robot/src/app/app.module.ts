@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { WebsocketService } from './services/websocket.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { ChartComponent } from './components/chart/chart.component';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [WebsocketService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

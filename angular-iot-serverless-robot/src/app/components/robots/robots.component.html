@@ -3,9 +3,10 @@
     <tr>
         <th>Robot ID</th>
         <th>Robot IP</th>
-        <th>Robot Name</th>
-        <th>Online</th>
-        <th>Available</th>
+        <th>Red</th>
+        <th>Robot Nombre</th>
+        <th>En Linea</th>
+        <th>Disponible</th>
         <th>Ingresar</th>
     </tr>
     </thead>
@@ -13,10 +14,11 @@
         <tr *ngFor="let robot of availableRobots">
             <td>{{ robot.robotId }}</td>
             <td>{{ robot.robotIp }}</td>
-            <td>{{ robot.robotName }}</td>
+            <td>{{ robot.robotName }}</td>x
             <td>{{ robot.isOnline }}</td>
             <td>{{ robot.isAvailable }}</td>
-            <td><button>Ingresar</button></td>
+            <!---Need  to select a robot, and when its selected -->
+            <td><button (click)="onSelectedRobot(robot.robotId)">Ingresar</button></td>
         </tr>
     </tbody>
 </table>

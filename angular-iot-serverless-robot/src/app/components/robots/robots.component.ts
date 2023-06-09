@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { WebsocketService } from 'src/app/services/websocket.service';
 
 @Component({
   selector: 'app-robots',
@@ -9,14 +10,14 @@ import { HttpClient } from '@angular/common/http';
 export class RobotsComponent implements OnInit {
   availableRobots: any[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private webSocketService: WebsocketService) { }
 
   ngOnInit(): void {
     this.getAvailableRobots();
   }
 
   getAvailableRobots(): void {
-    this.http.get<any>('https://8rxyu04881.execute-api.us-east-1.amazonaws.com/dev/robot/available').subscribe(
+    this.http.get<any>('https://grxctmpm5i.execute-api.us-east-1.amazonaws.com/dev/robot/available').subscribe(
       response => {
         this.availableRobots = response.data;
       },
@@ -24,5 +25,11 @@ export class RobotsComponent implements OnInit {
         console.error('Error retrieving available robots:', error);
       }
     );
+  }
+
+  onSelectedRobot(robot: string): void {
+    console.log('Selected robot:', robot);
+    const user = sessionStorage.getItem('user');
+    this.webSocketService.setUser(user!, robot);
   }
 }
