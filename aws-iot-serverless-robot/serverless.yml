@@ -1,5 +1,5 @@
 service: aws-iot-serverless-robot
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
@@ -44,7 +44,7 @@ functions:
           # private: true
     environment:
       TABLE_NAME: robots_registry
-      
+
   getAvailableRobots:
     handler: index.getAvailableRobots
     events:
@@ -54,11 +54,11 @@ functions:
           # private: true
     environment:
       TABLE_NAME: robots_registry
-  
+
   setRobotStatus:
     handler: index.setRobotStatus
     events:
-      - http: 
+      - http:
           path: /robot/status
           method: post
 
@@ -105,6 +105,16 @@ functions:
     events:
       - websocket:
           route: setReady
+
+  # MOVEMENTS
+  setMovements:
+    handler: movements.setMovements
+    events:
+      - http:
+          path: /robot/movements
+          method: post
+    environment:
+      TABLE_NAME: rooms
 
 resources:
   Resources:

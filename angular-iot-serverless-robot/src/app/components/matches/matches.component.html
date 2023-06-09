@@ -1,1 +1,23 @@
-<p>matches works!</p>
+<div>El navbar puede venir aqui :v</div>
+<div class="content">
+  <h1>Partidas</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID de la partida</th>
+        <th>Nombre de la partida</th>
+        <th>Nro de jugadores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let match of matches">
+        <td>{{ match.roomId }}</td>
+        <td>{{ match.roomName }}</td>
+        <td>{{ match.members.length }}</td>
+        <td>
+          <button (click)="viewMatchDetails(match.roomId)">Ver Detalles</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

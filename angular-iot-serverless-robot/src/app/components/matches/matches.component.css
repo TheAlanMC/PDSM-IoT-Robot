@@ -1,3 +1,18 @@
+.content {
+  /*center all content*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-
-/*# sourceMappingURL=matches.component.css.map */
+.match {
+  /*center all content*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f;
+}

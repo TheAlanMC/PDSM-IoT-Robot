@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
@@ -18,7 +18,8 @@ module.exports.registerNewRobot = async (event) => {
     // If exists a robot with the same ip, the same name and is online, return an error that the robot is already registered
     const { Items } = await DynamoDB.scan({
       TableName: TABLE_NAME,
-      FilterExpression: "robotIp = :robotIp and robotName = :robotName and isOnline = :isOnline",
+      FilterExpression:
+        "robotIp = :robotIp and robotName = :robotName and isOnline = :isOnline",
       ExpressionAttributeValues: {
         ":robotIp": robotIp,
         ":robotName": robotName,
@@ -35,7 +36,7 @@ module.exports.registerNewRobot = async (event) => {
         body: JSON.stringify({
           data: null,
           message: "Robot already registered",
-          sucessful: false
+          sucessful: false,
         }),
       };
     }
@@ -61,7 +62,7 @@ module.exports.registerNewRobot = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Robot registered successfully",
-        sucessful: true
+        sucessful: true,
       }),
     };
   } catch (error) {
@@ -75,7 +76,7 @@ module.exports.registerNewRobot = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Error registering robot",
-        sucessful: false
+        sucessful: false,
       }),
     };
   }
@@ -106,7 +107,7 @@ module.exports.getAvailableRobots = async (event) => {
           isAvailable: item.isAvailable,
         })),
         message: "Robots retrieved successfully",
-        sucessful: true
+        sucessful: true,
       }),
     };
   } catch (error) {
@@ -120,11 +121,11 @@ module.exports.getAvailableRobots = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Error retrieving robots",
-        sucessful: false
+        sucessful: false,
       }),
     };
   }
-}
+};
 
 module.exports.setRobotStatus = async (event) => {
   try {
@@ -150,7 +151,7 @@ module.exports.setRobotStatus = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Robot status updated successfully",
-        sucessful: true
+        sucessful: true,
       }),
     };
   } catch (error) {
@@ -164,8 +165,8 @@ module.exports.setRobotStatus = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Error updating robot status",
-        sucessful: false
+        sucessful: false,
       }),
     };
   }
-}
+};
