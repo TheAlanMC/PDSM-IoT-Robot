@@ -6,37 +6,43 @@
   </div>
   <div class="sep"></div>
   <div class="data">
-    <div class="company-logo rd">
-      <img
-          src="https://i.pinimg.com/originals/33/4e/06/334e063ae9f247704b37549b4b0f47d1.png"
-          alt="IOT"
-      />
-    </div>
-    <div class="company-name rd">
-      <h1>PDSM Enterprises</h1>
+    <div class="navbar-sup">
+      <div class="company-logo rd">
+        <img
+            src="https://i.pinimg.com/originals/33/4e/06/334e063ae9f247704b37549b4b0f47d1.png"
+            alt="IOT"
+        />
+      </div>
+      <div class="company-name rd">
+        <h1>PDSM Enterprises</h1>
+      </div>
     </div>
     <div class="weather-data rd">
       <!-- Fecha, hora y clima -->
       <div class="datetime-wrap">
-        <div class="dt-logo">
-          <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-B559E6sZ5pYtHIBWZKkuKxac9mKgRr0B22n7J0xi7wroaBuoeFpVAwXPl6C7daVnQyU&usqp=CAU"
-              alt=""
-          />
+        <div>
+          <div class="dt-logo">
+            <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-B559E6sZ5pYtHIBWZKkuKxac9mKgRr0B22n7J0xi7wroaBuoeFpVAwXPl6C7daVnQyU&usqp=CAU"
+                alt=""
+            />
+          </div>
+          <div class="datetime">
+            <h3>Fecha</h3>
+            <p id="date">{{this.date | date: 'dd/MM/yyyy'}}</p>
+          </div>
         </div>
-        <div class="datetime">
-          <h3>Fecha</h3>
-          <p id="date">{{this.date | date: 'dd/MM/yyyy'}}</p>
-        </div>
-        <div class="dt-logo">
-          <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_cCP8Qspn6zauwaxEMC_dQgjV5hir_gODREIH9W6fofbkYMuIFHhZHMPC_W16kGKtjHk&usqp=CAU"
-              alt=""
-          />
-        </div>
-        <div class="datetime">
-          <h3>Hora</h3>
-          <p id="time">{{this.date | date: 'HH:mm:ss'}}</p>
+        <div>
+          <div class="dt-logo">
+            <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_cCP8Qspn6zauwaxEMC_dQgjV5hir_gODREIH9W6fofbkYMuIFHhZHMPC_W16kGKtjHk&usqp=CAU"
+                alt=""
+            />
+          </div>
+          <div class="datetime">
+            <h3>Hora</h3>
+            <p id="time">{{this.date | date: 'HH:mm:ss'}}</p>
+          </div>
         </div>
       </div>
       <div class="weather">
@@ -54,3 +60,4 @@
     </div>
   </div>
 </div>
+<div class="sep"></div>
