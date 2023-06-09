@@ -58,4 +58,31 @@ module.exports.setMovements = async (event) => {
       ":members": roomMembers,
     },
   }).promise();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Movements updated" }),
+  };
+};
+
+module.exports.getMovements = async (event) => {
+  const { roomId } = JSON.parse(event.body);
+
+  const roomData = await DynamoDB.get({
+    TableName: TABLE_NAME,
+    Key: { roomId: roomId },
+  }).promise();
+
+  if (!roomData.Item) {
+    console.log("Room not found");
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ message: "Room not found" }),
+    };
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(roomData.Item.members),
+  };
 };
