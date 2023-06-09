@@ -115,6 +115,14 @@ functions:
           method: post
     environment:
       TABLE_NAME: rooms
+  getMovements:
+    handler: movements.getMovements
+    events:
+      - http:
+          path: /robot/movements
+          method: get
+    environment:
+      TABLE_NAME: rooms
 
 resources:
   Resources:
