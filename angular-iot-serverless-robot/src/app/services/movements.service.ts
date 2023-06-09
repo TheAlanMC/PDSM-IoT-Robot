@@ -17,4 +17,8 @@ export class MovementsService {
   getMovementByRoomId(roomId: string) {
     return this.http.get(`${this.movementsUrl}`);
   }
+  registerMovements(movementRecord: any) {
+    return this.http.post(`${this.movementsUrl}`, movementRecord);
+  }
+
 }
