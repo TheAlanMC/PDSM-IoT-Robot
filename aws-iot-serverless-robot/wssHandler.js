@@ -185,7 +185,7 @@ module.exports.createRoomHandler = async (event, context, callback) => {
         console.log("Room created")
         sendToConnection(connectionId, {
             message: roomId,
-            type: "room-info"
+            type: "room-join"
         }, event);
         sendToConnection(connectionId, {
             message: `${connectionData.Item.userName} ingresó a la sala`,
@@ -265,6 +265,10 @@ module.exports.joinRoomHandler = async (event, context, callback) => {
         callback(failedResponse(403, "Room is not joinable"));
     }
 
+    sendToConnection(connectionId, {
+        message: roomData.Item.roomId,
+        type: "room-join"
+    }, event);
     // add the connection to the room
     console.log("Adding connection to room");
     const members = roomData.Item.members;
