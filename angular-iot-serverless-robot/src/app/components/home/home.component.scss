@@ -10,7 +10,7 @@
   height: 100vh;
   width: 100vw;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-  url(../../../assets/images/background.jpg);
+  url(/assets/images/background.jpg);
   background-color: black;
   background-attachment: fixed;
   background-size: cover;
@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   /* landscape mode */
   @media (orientation: landscape) {
       width: 50vw;
@@ -85,4 +85,3 @@
     margin-bottom: 15px;
   }
 }
-  
