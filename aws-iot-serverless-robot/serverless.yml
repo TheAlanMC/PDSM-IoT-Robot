@@ -123,6 +123,14 @@ functions:
           method: get
     environment:
       TABLE_NAME: rooms
+  getRooms:
+    handler: movements.getRooms
+    events:
+      - http:
+          path: /rooms
+          method: get
+    environment:
+      TABLE_NAME: rooms
 
 resources:
   Resources:
