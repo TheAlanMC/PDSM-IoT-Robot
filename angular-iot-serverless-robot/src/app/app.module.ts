@@ -14,6 +14,8 @@ import { MatchDetailsComponent } from './components/match-details/match-details.
 import { ChartComponent } from './components/chart/chart.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { RobotsControlComponent } from './components/robots-control/robots-control.component';
+import { NgxJoystickModule } from 'ngx-joystick';
 
 @NgModule({
   declarations: [
@@ -26,13 +28,15 @@ import { FooterComponent } from './components/footer/footer.component';
     MatchDetailsComponent,
     ChartComponent,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    RobotsControlComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxJoystickModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

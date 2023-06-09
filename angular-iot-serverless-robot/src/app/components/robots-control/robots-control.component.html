@@ -1,0 +1,34 @@
+<div class=container>
+  <div class=cable></div>
+  <div class=controller>
+    <div class=centerBlue>
+      <div class=centerLeft></div>
+      <div class=centerRight></div>
+    </div>
+    <div class=centerStart>
+      <div class=SLeft></div>
+      <div class=SRight></div>
+    </div>
+    <div class=centerSelect>
+      <div class=SLeft></div>
+      <div class=SRight></div>
+    </div>
+
+    <div class=controllerLeft>
+      <div class=circle></div>
+      <div class=crossCenter>
+        <ngx-joystick #motorJoystick [options]="staticOptions" (start)="onStartMotor($event)" (end)="onEndMotor($event)" (move)="onMoveMotor($event)"></ngx-joystick>
+      </div>
+    </div>
+    <div class=controllerRight>
+      <div class=backButton1Center>
+        <div class= cornerLeft1 (click)="setServo(90)"></div>
+        <div class= cornerRight1 (click)="setServo(70)"></div>
+      </div>
+      <div class=backButton2Center>
+        <div class= cornerRight2 (click)="setServo(40)"></div>
+        <div class= cornerLeft2 (click)="setServo(0)"></div>
+      </div>
+    </div>
+  </div>
+</div>

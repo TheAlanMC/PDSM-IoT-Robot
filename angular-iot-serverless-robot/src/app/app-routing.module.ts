@@ -7,11 +7,13 @@ import { RobotsComponent } from './components/robots/robots.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomHomeComponent } from './components/room-home/room-home.component';
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
+import {RobotsControlComponent} from "./components/robots-control/robots-control.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'robots', component: RobotsComponent },
+  { path: 'robots-control', component: RobotsControlComponent },
   { path: 'rooms', component: RoomsComponent },
   { path: 'rooms/:id', component: RoomHomeComponent },
   { path: 'matches', component: MatchesComponent },
