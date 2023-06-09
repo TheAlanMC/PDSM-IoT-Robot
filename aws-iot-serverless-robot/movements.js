@@ -5,6 +5,12 @@ const DynamoDB = new AWS.DynamoDB.DocumentClient();
 
 const TABLE_NAME = process.env.ROOMS_TABLE;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers" : "*",
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+}
+
 // POST http://setMovements
 // {
 //   roomId: 1,
@@ -29,6 +35,7 @@ module.exports.setMovements = async (event) => {
     console.log("Room not found");
     return {
       statusCode: 404,
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Room not found" }),
     };
   }
@@ -46,6 +53,7 @@ module.exports.setMovements = async (event) => {
     console.log("Member not found");
     return {
       statusCode: 404,
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Member not found" }),
     };
   }
@@ -61,6 +69,7 @@ module.exports.setMovements = async (event) => {
 
   return {
     statusCode: 200,
+    headers: corsHeaders,
     body: JSON.stringify({ message: "Movements updated" }),
   };
 };
@@ -77,12 +86,14 @@ module.exports.getMovements = async (event) => {
     console.log("Room not found");
     return {
       statusCode: 404,
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Room not found" }),
     };
   }
 
   return {
     statusCode: 200,
+    headers: corsHeaders,
     body: JSON.stringify(roomData.Item.members),
   };
 };
@@ -94,6 +105,7 @@ module.exports.getRooms = async () => {
 
   return {
     statusCode: 200,
+    headers: corsHeaders,
     body: JSON.stringify(roomsData.Items),
   };
 };

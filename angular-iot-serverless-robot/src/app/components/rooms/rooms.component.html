@@ -1,21 +1,21 @@
-<div>
-  <form [formGroup]="userForm" (submit)="setUser()">
-    <input formControlName="user" placeholder="Usuario" />
-    <button>submit</button>
-  </form>
-  <form [formGroup]="createRoomForm" (submit)="createRoom()">
-    <input formControlName="roomName" placeholder="Sala" />
-    <input formControlName="password" placeholder="Contraseña" type="password"/>
-    <button>submit</button>
-  </form>
-  <form [formGroup]="joinRoomForm" (submit)="joinRoom()">
-    <input formControlName="roomId" placeholder="Sala" />
-    <input formControlName="password" placeholder="Contraseña" type="password"/>
-    <button>submit</button>
-  </form>
-  <form [formGroup]="setReadyForm">
-    <input formControlName="roomId"/>
-    <button (click)="setReady(true)">Ready</button>
-    <button (click)="setReady(false)">Not Ready</button>
-  </form>
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Capacidad</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let room of rooms">
+      <td>{{room.roomName}}</td>
+      <td>{{room.members.length}}/4</td>
+      <td>
+        <button class="btn btn-primary" *ngIf="room.canJoin">Unirse</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="table">
+  <button (click)="createRoom()">Crear sala</button>
 </div>

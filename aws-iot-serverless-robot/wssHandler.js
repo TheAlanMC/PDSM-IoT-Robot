@@ -184,8 +184,8 @@ module.exports.createRoomHandler = async (event, context, callback) => {
         }).promise();
         console.log("Room created")
         sendToConnection(connectionId, {
-            message: "Room created",
-            type: "info"
+            message: roomId,
+            type: "room-info"
         }, event);
         sendToConnection(connectionId, {
             message: `${connectionData.Item.userName} ingresó a la sala`,

@@ -4,7 +4,6 @@
         <th>Robot ID</th>
         <th>Robot IP</th>
         <th>Red</th>
-        <th>Nombre Robot </th>
         <th>En Linea</th>
         <th>Disponible</th>
         <th>Conectar</th>
@@ -13,8 +12,7 @@
     <tbody>
         <tr *ngFor="let robot of availableRobots">
             <td>{{ robot.robotId }}</td>
-            <td>{{ robot.robotIp }}</td>
-            <td>{{ robot.robotName }}</td>x
+            <td>{{ robot.robotIp }}</td>\
             <td>{{ robot.isOnline }}</td>
             <td>{{ robot.isAvailable }}</td>
             <td><button (click)="onSelectedRobot(robot.robotId)">Conectar</button></td>
