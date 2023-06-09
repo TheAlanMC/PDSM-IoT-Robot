@@ -17,7 +17,7 @@ export class RobotsComponent implements OnInit {
   }
 
   getAvailableRobots(): void {
-    this.http.get<any>('https://grxctmpm5i.execute-api.us-east-1.amazonaws.com/dev/robot/available').subscribe(
+    this.http.get<any>('https://dz40eacaqk.execute-api.us-east-1.amazonaws.com/dev/robot/available').subscribe(
       response => {
         this.availableRobots = response.data;
       },

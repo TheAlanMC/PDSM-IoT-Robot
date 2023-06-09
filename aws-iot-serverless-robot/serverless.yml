@@ -75,16 +75,11 @@ functions:
     events:
       - websocket:
           route: $disconnect
-  defaultHandler:
-    handler: wssHandler.defaultHandler
-    events:
-      - websocket:
-          route: $default
   setUserHandler:
     handler: wssHandler.setUserHandler
     events:
       - websocket:
-          route: setUser
+          route: setUserRobot
   createRoomHandler:
     handler: wssHandler.createRoomHandler
     events:
@@ -105,6 +100,11 @@ functions:
     events:
       - websocket:
           route: setReady
+  defaultHandler:
+    handler: wssHandler.defaultHandler
+    events:
+      - websocket:
+          route: $default
 
   # MOVEMENTS
   setMovements:

@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(
@@ -22,14 +22,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.websocketService.connect();
-  }
-
-  ngOnDestroy() {
-    this.websocketService.close();
-  }
-
   submit() {
     if (this.loginForm.invalid) {
       return;
@@ -37,5 +29,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const username = this.loginForm.value.username;
     sessionStorage.setItem('user', username);
     this.router.navigate(['/robots'])
+  }
+
+  ngOnInit() {
+    this.websocketService.connect();
   }
 }

@@ -8,7 +8,7 @@ import {Router} from "@angular/router";
   templateUrl: './rooms.component.html',
   styleUrls: ['./rooms.component.scss']
 })
-export class RoomsComponent implements OnInit {
+export class RoomsComponent {
   userForm: FormGroup;
   createRoomForm: FormGroup;
   joinRoomForm: FormGroup;
@@ -33,11 +33,6 @@ export class RoomsComponent implements OnInit {
     this.setReadyForm = this.formBuilder.group({
       roomId: ['', Validators.required],
     })
-  }
-
-  ngOnInit(): void {
-    // this should be done only once
-    this.websocketService.connect();
   }
 
   setUser() {

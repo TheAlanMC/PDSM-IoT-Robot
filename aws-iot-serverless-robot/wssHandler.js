@@ -63,11 +63,12 @@ module.exports.disconnectHandler = async (event, _context, callback) => {
 };
 
 module.exports.defaultHandler = async (event, _context, callback) => {
+    const connectionId = event.requestContext.connectionId;
     sendToConnection(connectionId, {
         message: "Invalid request",
         type: "error"
     }, event);
-    callback(failedResponse(400, "Invalid request"))
+    callback(null, succesfulResponse)
 };
 
 /**

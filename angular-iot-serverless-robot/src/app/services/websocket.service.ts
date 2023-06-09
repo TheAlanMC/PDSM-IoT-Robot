@@ -12,7 +12,6 @@ export interface Message {
 @Injectable({
   providedIn: 'root'
 })
-
 export class WebsocketService {
   private wsUrl = environment.wsUrl;
   private socket$!: WebSocketSubject<any>;
@@ -29,8 +28,9 @@ export class WebsocketService {
   }
 
   setUser(user: string, robot: string) {
+    console.log(this.socket$);
     const message: SetUserDtoWs = {
-      action: 'setUser',
+      action: 'setUserRobot',
       user,
       robot
     }
