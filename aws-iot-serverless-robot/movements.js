@@ -8,8 +8,8 @@ const TABLE_NAME = process.env.ROOMS_TABLE;
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
-  "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
-}
+  "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH",
+};
 
 // POST http://setMovements
 // {
@@ -20,7 +20,6 @@ const corsHeaders = {
 //     leftMotorSpeed: 45,
 //     rightMotorDirection: 1,
 //     leftMotorDirection: 1,
-//     servoAngle: 48
 //   }
 // }
 
@@ -42,7 +41,7 @@ module.exports.setMovements = async (event) => {
   }
 
   const roomMembers = roomData.Item.members;
-  const memberFound = roomMembers.iterable.find((item) => {
+  const memberFound = roomMembers.find((item) => {
     if (item.userName == userName) {
       item.movements = item.movements.concat(newMovements);
       return true;
@@ -140,4 +139,3 @@ module.exports.getRooms = async (event) => {
     body: JSON.stringify(roomsData.Items),
   };
 };
-
