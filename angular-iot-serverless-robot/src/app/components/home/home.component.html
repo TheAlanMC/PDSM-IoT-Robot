@@ -7,6 +7,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="submit()" class="user-form">
       <input type="text" class="input" formControlName="username" placeholder="Nombre de usuario">
       <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Guardar</button>
+      <button type="button" class="btn btn-primary" (click)="goToMatches()">Ver Partidos</button>
     </form>
   </div>
 </div>

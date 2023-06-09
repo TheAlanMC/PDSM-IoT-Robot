@@ -41,9 +41,12 @@ module.exports.setMovements = async (event) => {
   }
 
   const roomMembers = roomData.Item.members;
+  console.log(userName)
+  console.log(roomMembers);
   const memberFound = roomMembers.find((item) => {
     if (item.userName === userName) {
-      item.movements = item.movements.concat(newMovements);
+      if(!item.movements) item.movements = [];
+      item.movements = [...item.movements, newMovements];
       return true;
     }
     return false;

@@ -34,4 +34,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.websocketService.connect();
   }
+
+  goToMatches() {
+    this.router.navigate(['/matches'])
+  }
 }
