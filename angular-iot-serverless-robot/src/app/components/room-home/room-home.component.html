@@ -1,12 +1,39 @@
-<div>
-  <div *ngFor="let event of joinMessages">
-    <span>{{event.timestamp | date: 'HH:mm:ss'}}</span>
-    <span>{{event.message}}</span>
+<div class="container">
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Listo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let member of members">
+          <td>{{member.userName}}</td>
+          <td [style.color]="member.isReady ? 'green' : 'red'">{{member.isReady ? 'Listo' : 'No listo'}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div *ngFor="let member of members">
-    <span>{{member.userName}}</span>
-    <span>{{member.isReady ? 'Listo' : 'No listo'}}</span>
+  <div class="card">
+    <table class="message-table">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Mensaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of joinMessages">
+          <td>{{ event.timestamp | date: 'HH:mm:ss' }}</td>
+          <td>{{ event.message }}</td>
+        </tr>
+      </tbody>
+    </table>
+    
   </div>
-  <button (click)="setReady(true)">Listo</button>
-  <button (click)="setReady(false)">Cancelar</button>
+  <div class="button-container">
+    <button class="green-button" (click)="setReady(true)">Listo</button>
+    <button class="red-button" (click)="setReady(false)">Cancelar</button>
+  </div>
 </div>

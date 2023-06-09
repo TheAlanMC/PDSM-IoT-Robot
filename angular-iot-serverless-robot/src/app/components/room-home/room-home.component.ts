@@ -28,6 +28,7 @@ export class RoomHomeComponent implements OnInit {
   ngOnInit(): void {
     this.websocketService.getMessageObservable().subscribe((message) => {
       this.joinMessages.push(message);
+      console.log(message);
       this.members.push({
         userName: message.message.split(' ingresó')[0],
         isReady: false
