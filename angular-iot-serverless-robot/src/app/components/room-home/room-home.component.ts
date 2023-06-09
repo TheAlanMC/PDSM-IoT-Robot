@@ -14,6 +14,7 @@ export class RoomHomeComponent implements OnInit {
   joinMessages: any[] = [];
 
   members: any[] = [];
+  readyMessages: any[] = [];
   roomId: string;
 
   constructor(
@@ -27,6 +28,18 @@ export class RoomHomeComponent implements OnInit {
   ngOnInit(): void {
     this.websocketService.getMessageObservable().subscribe((message) => {
       this.joinMessages.push(message);
+      this.members.push({
+        userName: message.message.split(' ingresó')[0],
+        isReady: false
+      })
+    })
+    this.websocketService.getReadyObservable().subscribe((message) => {
+      this.members = this.members.map((member) => {
+        if(member.userName === message.userName) {
+          member.isReady = message.isReady;
+        }
+        return member;
+      });
     })
     this.roomsService.getRoomById(this.roomId).subscribe({
       next: (response: any) => {

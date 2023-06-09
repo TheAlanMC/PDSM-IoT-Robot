@@ -18,6 +18,7 @@ export class WebsocketService {
   private wsUrl = environment.wsUrl;
   private socket$!: WebSocketSubject<any>;
   joinSubject = new Subject<any>();
+  readySubkect = new Subject<any>();
 
   constructor(private router: Router) {
   }
@@ -36,6 +37,11 @@ export class WebsocketService {
             message: data.message,
             timestamp: new Date()
           });
+        } else if(data.type === 'set-ready') {
+          this.readySubkect.next({
+            userName: data.userName,
+            isReady: data.isReady
+          })
         }
       });
     }
@@ -43,6 +49,10 @@ export class WebsocketService {
 
   public getMessageObservable() {
     return this.joinSubject.asObservable();
+  }
+
+  public getReadyObservable() {
+    return this.readySubkect.asObservable();
   }
 
   setUser(user: string, robot: string) {
