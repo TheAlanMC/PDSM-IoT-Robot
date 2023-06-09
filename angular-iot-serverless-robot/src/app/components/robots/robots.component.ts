@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WebsocketService } from 'src/app/services/websocket.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-robots',
@@ -10,7 +11,8 @@ import { WebsocketService } from 'src/app/services/websocket.service';
 export class RobotsComponent implements OnInit {
   availableRobots: any[] = [];
 
-  constructor(private http: HttpClient, private webSocketService: WebsocketService) { }
+  constructor(private http: HttpClient, private webSocketService: WebsocketService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getAvailableRobots();
@@ -31,5 +33,6 @@ export class RobotsComponent implements OnInit {
     console.log('Selected robot:', robot);
     const user = sessionStorage.getItem('user');
     this.webSocketService.setUser(user!, robot);
+    this.router.navigate(['/rooms']);
   }
 }
