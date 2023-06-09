@@ -4,10 +4,10 @@
         <th>Robot ID</th>
         <th>Robot IP</th>
         <th>Red</th>
-        <th>Robot Nombre</th>
+        <th>Nombre Robot </th>
         <th>En Linea</th>
         <th>Disponible</th>
-        <th>Ingresar</th>
+        <th>Conectar</th>
     </tr>
     </thead>
     <tbody>
@@ -17,8 +17,7 @@
             <td>{{ robot.robotName }}</td>x
             <td>{{ robot.isOnline }}</td>
             <td>{{ robot.isAvailable }}</td>
-            <!---Need  to select a robot, and when its selected -->
-            <td><button (click)="onSelectedRobot(robot.robotId)">Ingresar</button></td>
+            <td><button (click)="onSelectedRobot(robot.robotId)">Conectar</button></td>
         </tr>
     </tbody>
 </table>
