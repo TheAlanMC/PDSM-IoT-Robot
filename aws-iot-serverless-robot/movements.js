@@ -86,3 +86,14 @@ module.exports.getMovements = async (event) => {
     body: JSON.stringify(roomData.Item.members),
   };
 };
+
+module.exports.getRooms = async () => {
+  const roomsData = await DynamoDB.scan({
+    TableName: TABLE_NAME,
+  }).promise();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(roomsData.Items),
+  };
+};
