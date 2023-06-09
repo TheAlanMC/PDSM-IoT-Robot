@@ -7,49 +7,25 @@ const TABLE_NAME = process.env.TABLE_NAME;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers" : "*",
+  "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
 }
 
 module.exports.registerNewRobot = async (event) => {
   try {
     // TODO: MAYBE ADD A SECRET KEY TO REGISTER A NEW ROBOT
-    const { robotIp, robotName } = JSON.parse(event.body);
-    // If exists a robot with the same ip, the same name and is online, return an error that the robot is already registered
-    const { Items } = await DynamoDB.scan({
-      TableName: TABLE_NAME,
-      FilterExpression:
-        "robotIp = :robotIp and robotName = :robotName and isOnline = :isOnline",
-      ExpressionAttributeValues: {
-        ":robotIp": robotIp,
-        ":robotName": robotName,
-        ":isOnline": true,
-      },
-    }).promise();
-    if (Items.length > 0) {
-      return {
-        statusCode: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders
-        },
-        body: JSON.stringify({
-          data: null,
-          message: "Robot already registered",
-          sucessful: false,
-        }),
-      };
-    }
+    const { robotIp, hostname } = JSON.parse(event.body);
     const robotId = uuidv4();
+    const timestamp = Date.now();
+    const date = new Date(timestamp);
+
     await DynamoDB.put({
       TableName: TABLE_NAME,
       Item: {
         robotId,
         robotIp,
-        robotName,
-        isOnline: true,
-        isAvailable: true,
-        timestamp: Date.now(),
+        hostname,
+        timestamp: date.toISOString(),
       },
     }).promise();
     // TODO: Register in a new table for a new game
@@ -84,11 +60,12 @@ module.exports.registerNewRobot = async (event) => {
 
 module.exports.getAvailableRobots = async (event) => {
   try {
+    // get robots from the last 10 minutes
     const { Items } = await DynamoDB.scan({
       TableName: TABLE_NAME,
-      FilterExpression: "isAvailable = :isAvailable",
+      FilterExpression: "timestamp > :timestamp",
       ExpressionAttributeValues: {
-        ":isAvailable": true,
+        ":timestamp": Date.now() - 10 * 60 * 1000,
       },
     }).promise();
 
@@ -121,50 +98,6 @@ module.exports.getAvailableRobots = async (event) => {
       body: JSON.stringify({
         data: null,
         message: "Error retrieving robots",
-        sucessful: false,
-      }),
-    };
-  }
-};
-
-module.exports.setRobotStatus = async (event) => {
-  try {
-    const { robotId, isAvailable, isOnline } = JSON.parse(event.body);
-    await DynamoDB.update({
-      TableName: TABLE_NAME,
-      Key: {
-        robotId,
-      },
-      UpdateExpression: "set isAvailable = :isAvailable, isOnline = :isOnline",
-      ExpressionAttributeValues: {
-        ":isAvailable": isAvailable,
-        ":isOnline": isOnline,
-      },
-    }).promise();
-
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders
-      },
-      body: JSON.stringify({
-        data: null,
-        message: "Robot status updated successfully",
-        sucessful: true,
-      }),
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders
-      },
-      body: JSON.stringify({
-        data: null,
-        message: "Error updating robot status",
         sucessful: false,
       }),
     };
