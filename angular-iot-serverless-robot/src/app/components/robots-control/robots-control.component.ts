@@ -9,7 +9,7 @@ import {RobotService} from "../../services/robot.service";
   styleUrls: ['./robots-control.component.scss']
 })
 export class RobotsControlComponent implements OnInit {
-  ip = '192.168.0.62'
+  ip : string = '';
 
   rightMotorDirection : number = 0;
   leftMotorDirection : number = 0;
@@ -28,10 +28,11 @@ export class RobotsControlComponent implements OnInit {
   interactingMotor!: boolean;
   isPressed = false;
 
-  constructor(private robotService: RobotService) { }
+  constructor(private robotService: RobotService) {}
 
   ngOnInit() {
     this.startInterval();
+    this.ip = sessionStorage.getItem('robotIp') || '';
   }
 
   setServo(value: number) {

@@ -3,6 +3,7 @@ import {WebsocketService} from "../../services/websocket.service";
 import {ActivatedRoute} from "@angular/router";
 import {MovementsService} from "../../services/movements.service";
 import {RoomsService} from "../../services/rooms.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-home',
@@ -19,7 +20,8 @@ export class RoomHomeComponent implements OnInit {
   constructor(
     private websocketService: WebsocketService,
     private activatedRoute: ActivatedRoute,
-    private roomsService: RoomsService
+    private roomsService: RoomsService,
+    private router: Router
   ) {
     this.roomId = this.activatedRoute.snapshot.paramMap.get('id')!;
     sessionStorage.setItem('roomId', this.roomId);
@@ -70,6 +72,7 @@ export class RoomHomeComponent implements OnInit {
     const interval = setInterval(() => {
       if(currVal === -1) {
         clearInterval(interval);
+        this.router.navigate(['/robots-control']).then(r => console.log(r));
         return;
       }
       this.joinMessages = [
