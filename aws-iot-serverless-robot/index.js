@@ -14,7 +14,7 @@ const corsHeaders = {
 module.exports.registerNewRobot = async (event) => {
   try {
     // TODO: MAYBE ADD A SECRET KEY TO REGISTER A NEW ROBOT
-    const { robotIp, hostname } = JSON.parse(event.body);
+    const { robotIp, networkName } = JSON.parse(event.body);
     const robotId = uuidv4();
     const timestamp = Date.now();
     const date = new Date(timestamp);
@@ -24,8 +24,8 @@ module.exports.registerNewRobot = async (event) => {
       Item: {
         robotId,
         robotIp,
-        hostname,
-        timestamp: date.toISOString(),
+        networkName,
+        currentTime: date.toISOString(),
       },
     }).promise();
     // TODO: Register in a new table for a new game
@@ -61,11 +61,18 @@ module.exports.registerNewRobot = async (event) => {
 module.exports.getAvailableRobots = async (event) => {
   try {
     // get robots from the last 10 minutes
+    const currentTime = new Date();
+    const fifteenMinutesAgo = new Date(currentTime.getTime() - 15 * 60000);
+
     const { Items } = await DynamoDB.scan({
       TableName: TABLE_NAME,
-      FilterExpression: "timestamp > :timestamp",
+      FilterExpression: '#currentTime between :start_time and :end_time',
+      ExpressionAttributeNames: {
+        '#currentTime': 'currentTime',
+      },
       ExpressionAttributeValues: {
-        ":timestamp": Date.now() - 10 * 60 * 1000,
+        ':start_time': fifteenMinutesAgo.toISOString(),
+        ':end_time': currentTime.toISOString(),
       },
     }).promise();
 
@@ -80,8 +87,7 @@ module.exports.getAvailableRobots = async (event) => {
           robotId: item.robotId,
           robotIp: item.robotIp,
           robotName: item.robotName,
-          isOnline: item.isOnline,
-          isAvailable: item.isAvailable,
+          networkName: item.networkName
         })),
         message: "Robots retrieved successfully",
         sucessful: true,
