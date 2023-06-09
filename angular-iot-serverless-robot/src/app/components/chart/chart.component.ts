@@ -1,9 +1,9 @@
 import { AfterViewInit, Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { Chart, registerables } from 'chart.js';
-
-import { MovementsService } from '../../services/movements.service';
+import { RoomsService } from 'src/app/services/rooms.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,198 +11,203 @@ import { MovementsService } from '../../services/movements.service';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit, AfterViewInit {
-  player: any[] = [
-    {
-      userName: 'Player 1',
-      movements: [
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-      ],
-    },
-    {
-      userName: 'Player 2',
-      movements: [
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-      ],
-    },
-    {
-      userName: 'Player 3',
-      movements: [
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-      ],
-    },
-    {
-      userName: 'Player 4',
-      movements: [
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 0,
-          rightMotorDirection: 0,
-          leftMotorSpeed: 0,
-          leftMotorDirection: 0,
-          servoAngle: 0,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-        {
-          rightMotorSpeed: 1,
-          rightMotorDirection: 1,
-          leftMotorSpeed: 1,
-          leftMotorDirection: 1,
-          servoAngle: 1,
-        },
-      ],
-    },
-  ];
+  roomId: string = '';
+  player: any[] = [];
+  // player: any[] = [
+  //   {
+  //     userName: 'Player 1',
+  //     movements: [
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     userName: 'Player 2',
+  //     movements: [
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     userName: 'Player 3',
+  //     movements: [
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     userName: 'Player 4',
+  //     movements: [
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 0,
+  //         rightMotorDirection: 0,
+  //         leftMotorSpeed: 0,
+  //         leftMotorDirection: 0,
+  //         servoAngle: 0,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //       {
+  //         rightMotorSpeed: 1,
+  //         rightMotorDirection: 1,
+  //         leftMotorSpeed: 1,
+  //         leftMotorDirection: 1,
+  //         servoAngle: 1,
+  //       },
+  //     ],
+  //   },
+  // ];
 
-  constructor(private movementsService: MovementsService) {}
+  constructor(
+    private roomsService: RoomsService,
+    private router: ActivatedRoute
+  ) {}
 
   ngAfterViewInit(): void {
     Chart.register(...registerables);
@@ -536,7 +541,10 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.movementsService.getMovements().subscribe({
+    this.router.params.subscribe((params: Params) => {
+      this.roomId = params['id'];
+    });
+    this.roomsService.getRoomById(this.roomId).subscribe({
       next: (data: any) => {
         console.log(data);
         for (let i = 0; i < 4; i++) {
