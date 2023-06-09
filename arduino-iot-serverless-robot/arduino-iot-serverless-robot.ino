@@ -129,7 +129,7 @@ void registerRobot() {
   String payload;
   int httpCode;
   doc["robotIp"] = ipAddress;
-  doc["hostname"] = hostname;
+  doc["networkName"] = hostname;
   serializeJson(doc, payload);
   Serial.println(payload);
   // Create HTTPS client

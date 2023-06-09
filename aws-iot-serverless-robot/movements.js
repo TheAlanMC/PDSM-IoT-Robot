@@ -7,7 +7,7 @@ const TABLE_NAME = process.env.ROOMS_TABLE;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers" : "*",
+  "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
 }
 
@@ -20,6 +20,7 @@ const corsHeaders = {
 //     leftMotorSpeed: 45,
 //     rightMotorDirection: 1,
 //     leftMotorDirection: 1,
+//     servoAngle: 48
 //   }
 // }
 
@@ -107,12 +108,12 @@ module.exports.getRooms = async (event) => {
     roomId = null;
   }
 
-  if(roomId !== null) {
+  if (roomId !== null) {
     const roomData = await DynamoDB.get({
       TableName: TABLE_NAME,
       Key: { roomId: roomId },
     }).promise();
-  
+
     if (!roomData.Item) {
       console.log("Room not found");
       return {
@@ -121,7 +122,7 @@ module.exports.getRooms = async (event) => {
         body: JSON.stringify({ message: "Room not found" }),
       };
     }
-  
+
     return {
       statusCode: 200,
       headers: corsHeaders,

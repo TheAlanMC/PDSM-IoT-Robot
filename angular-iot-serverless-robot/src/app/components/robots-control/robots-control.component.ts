@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import { JoystickEvent, NgxJoystickComponent } from 'ngx-joystick';
 import { JoystickManagerOptions, JoystickOutputData } from 'nipplejs';
 import {RobotService} from "../../services/robot.service";
+import {MovementsService} from "../../services/movements.service";
 
 @Component({
   selector: 'app-robots-control',
@@ -10,11 +11,14 @@ import {RobotService} from "../../services/robot.service";
 })
 export class RobotsControlComponent implements OnInit {
   ip : string = '';
+  roomId : string = '';
+  userName : string = '';
 
   rightMotorDirection : number = 0;
   leftMotorDirection : number = 0;
   rightMotorSpeed : number = 0;
   leftMotorSpeed : number = 0;
+  servoAngle : number = 0;
 
   @ViewChild('motorJoystick') motorJoystick!: NgxJoystickComponent;
 
@@ -28,17 +32,21 @@ export class RobotsControlComponent implements OnInit {
   interactingMotor!: boolean;
   isPressed = false;
 
-  constructor(private robotService: RobotService) {}
+  constructor(private robotService: RobotService, private movementsService: MovementsService) {}
 
   ngOnInit() {
     this.startInterval();
     this.ip = sessionStorage.getItem('robotIp') || '';
+    this.roomId = sessionStorage.getItem('roomId') || '';
+    this.userName = sessionStorage.getItem('userName') || '';
   }
 
   setServo(value: number) {
     this.isPressed = !this.isPressed;
+    this.servoAngle = value;
     this.robotService.updateServoMotor(this.ip, value).subscribe();
   }
+
 
   onStartMotor(event: JoystickEvent) {
     this.interactingMotor = true;
@@ -89,5 +97,25 @@ export class RobotsControlComponent implements OnInit {
           }
         );
     }, 100);
+    setInterval(() => {
+      const movementRecord = {
+        roomId: this.roomId,
+        userName: this.userName,
+        movements: {
+          rightMotorSpeed: this.rightMotorSpeed,
+          leftMotorSpeed: this.leftMotorSpeed,
+          rightMotorDirection: this.rightMotorDirection,
+          leftMotorDirection: this.leftMotorDirection,
+          servoAngle: this.servoAngle
+        }
+      }
+      const jsonMovementRecord = JSON.stringify(movementRecord);
+      this.movementsService.registerMovements(jsonMovementRecord)
+        .subscribe((response: any) => {
+            // console.log(response);
+          }
+        );
+    }, 5000);
   }
 }
+
