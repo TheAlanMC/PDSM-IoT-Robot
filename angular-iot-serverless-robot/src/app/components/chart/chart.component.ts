@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Chart, registerables } from 'chart.js';
 
+import { MovementsService } from '../../services/movements.service';
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -11,7 +13,7 @@ import { Chart, registerables } from 'chart.js';
 export class ChartComponent implements OnInit, AfterViewInit {
   @Input() chartId: string = '';
 
-  constructor() {}
+  constructor(private movementsService: MovementsService) {}
 
   ngAfterViewInit(): void {
     Chart.register(...registerables);
@@ -55,5 +57,14 @@ export class ChartComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.movementsService.getMovements().subscribe({
+      next: (data: any) => {
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
 }
