@@ -11,7 +11,7 @@
       <td>{{room.roomName}}</td>
       <td>{{room.members.length}}/4</td>
       <td>
-        <button class="btn btn-primary" *ngIf="room.canJoin">Unirse</button>
+        <button class="btn btn-primary" *ngIf="room.canJoin" (click)="joinRoom(room.roomId)">Unirse</button>
       </td>
     </tr>
   </tbody>

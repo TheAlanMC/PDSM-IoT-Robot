@@ -5,6 +5,7 @@ import { SetUserDtoWs } from "../models/set.user.dto.ws";
 import { CreateRoomDtoWs } from "../models/create.room.dto.ws";
 import { JoinRoomDtoWs } from "../models/join.room.dto.ws";
 import {Router} from "@angular/router";
+import {from, Subject} from "rxjs";
 
 export interface Message {
   action: string;
@@ -16,6 +17,7 @@ export interface Message {
 export class WebsocketService {
   private wsUrl = environment.wsUrl;
   private socket$!: WebSocketSubject<any>;
+  joinSubject = new Subject<any>();
 
   constructor(private router: Router) {
   }
@@ -27,11 +29,20 @@ export class WebsocketService {
 
       this.socket$.subscribe((data: any) => {
         console.log(data);
-        if(data.type === 'room-info') {
+        if(data.type === 'room-join') {
           this.router.navigate([`/rooms/${data.message}`]);
+        } else if(data.type === 'room-update') {
+          this.joinSubject.next({
+            message: data.message,
+            timestamp: new Date()
+          });
         }
       });
     }
+  }
+
+  public getMessageObservable() {
+    return this.joinSubject.asObservable();
   }
 
   setUser(user: string, robot: string) {

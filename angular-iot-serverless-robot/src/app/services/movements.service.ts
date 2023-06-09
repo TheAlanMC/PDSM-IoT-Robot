@@ -6,11 +6,15 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class MovementsService {
-  private movementsUrl = environment.movementsUrl;
+  private movementsUrl = environment.baseUrl + '/robot/movements';
 
   constructor(private http: HttpClient) {}
 
   getMovements() {
     return this.http.get(this.movementsUrl);
+  }
+
+  getMovementByRoomId(roomId: string) {
+    return this.http.get(`${this.movementsUrl}`);
   }
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import {WebsocketService} from "../../services/websocket.service";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {RoomsService} from "../../services/rooms.service";
 
 @Component({
   selector: 'app-rooms',
@@ -12,23 +13,24 @@ import {HttpClient} from "@angular/common/http";
 export class RoomsComponent implements OnInit {
   rooms: any[] = [];
   constructor(private http: HttpClient, private webSocketService: WebsocketService,
-              private router: Router) {
+              private router: Router, private roomsService: RoomsService) {
   }
 
   ngOnInit(): void {
     this.getRooms()
   }
+
   getRooms() {
     console.log('getting rooms')
-    this.http.get<any>('https://dz40eacaqk.execute-api.us-east-1.amazonaws.com/dev/rooms').subscribe(
-      response => {
+    this.roomsService.getRooms().subscribe({
+      next: (response: any) => {
         console.log(response)
-        this.rooms = response;
+        this.rooms = response
       },
-      error => {
-        console.error('Error retrieving available robots:', error);
+      error: (error) => {
+        console.log(error)
       }
-    );
+    })
   }
 
   createRoom() {
@@ -38,6 +40,13 @@ export class RoomsComponent implements OnInit {
       if (password) {
         this.webSocketService.createRoom(roomName, password)
       }
+    }
+  }
+
+  joinRoom(roomId: string) {
+    const password = prompt("Ingresa la contraseña de la sala")
+    if (password) {
+      this.webSocketService.joinRoom(roomId, password)
     }
   }
 }
