@@ -38,7 +38,7 @@ export class RobotsControlComponent implements OnInit {
     this.startInterval();
     this.ip = sessionStorage.getItem('robotIp') || '';
     this.roomId = sessionStorage.getItem('roomId') || '';
-    this.userName = sessionStorage.getItem('userName') || '';
+    this.userName = sessionStorage.getItem('user') || '';
   }
 
   setServo(value: number) {
