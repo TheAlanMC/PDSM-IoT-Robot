@@ -8,13 +8,10 @@ import { HomeComponent } from './components/home/home.component';
 import { RobotsComponent } from './components/robots/robots.component';
 import { RoomsComponent } from './components/rooms/rooms.component';
 import { RoomHomeComponent } from './components/room-home/room-home.component';
-<<<<<<< Updated upstream
 import { ReactiveFormsModule } from '@angular/forms';
-import {HttpClientModule} from "@angular/common/http";
-=======
+import { HttpClientModule } from '@angular/common/http';
 import { MatchDetailsComponent } from './components/match-details/match-details.component';
 import { ChartComponent } from './components/chart/chart.component';
->>>>>>> Stashed changes
 
 @NgModule({
   declarations: [
@@ -25,15 +22,15 @@ import { ChartComponent } from './components/chart/chart.component';
     RoomsComponent,
     RoomHomeComponent,
     MatchDetailsComponent,
-    ChartComponent
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
